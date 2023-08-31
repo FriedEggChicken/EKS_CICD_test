@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eu-web-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: eu-web
+  template:
+    metadata:
+      labels:
+        app: eu-web
+    spec:
+      containers:
+        - name: eu-web-container
+          image: 806689154221.dkr.ecr.eu-central-1.amazonaws.com/testcicd:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 200m
+              memory: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eu-web-service
+spec:
+  selector:
+    app: eu-web
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+---
